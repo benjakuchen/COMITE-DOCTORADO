@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comité · Doctorado en Ciencias Biológicas · UNSJ</title>
+<script src="const SUPA_URL = 'https://TU-PROYECTO.supabase.co';
+const SUPA_KEY = 'TU-ANON-KEY';"></script>
+<style>
+  body.noauth nav{display:none}
+  :root{
+    --paper:#EEF1EC; --card:#F8F9F5; --ink:#1E2A22; --muted:#5B6B60;
+    --sage:#3E6B54; --sage-deep:#2C4E3D; --line:#D2D8CE;
+    --amber:#B5791F; --amber-bg:#F6ECD6; --red:#A5382F; --red-bg:#F3DCD8;
+    --green:#3E6B54; --green-bg:#DEEBE1; --slate:#5B6B60; --slate-bg:#E4E8E1;
+    --shadow:0 1px 2px rgba(30,42,34,.06),0 4px 16px rgba(30,42,34,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;font-weight:600;letter-spacing:-.01em}
+  button{font-family:inherit}
+  a{color:var(--sage-deep)}
+
+  header{background:var(--sage-deep);color:#EEF1EC;padding:18px 24px 0;position:sticky;top:0;z-index:20;box-shadow:var(--shadow)}
+  .brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .brand h1{margin:0;font-size:22px;color:#fff}
+  .brand .sub{font-size:12.5px;color:#B9CDBF;letter-spacing:.04em;text-transform:uppercase}
+  nav{display:flex;gap:2px;margin-top:14px;flex-wrap:wrap}
+  nav button{background:transparent;border:none;color:#C6D6C9;padding:10px 16px;font-size:14px;
+    border-radius:8px 8px 0 0;cursor:pointer;border-bottom:2px solid transparent}
+  nav button:hover{color:#fff;background:rgba(255,255,255,.06)}
+  nav button.active{color:var(--sage-deep);background:var(--paper);font-weight:600;border-bottom-color:var(--paper)}
+  nav button .count{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;font-size:11px;line-height:17px;
+    text-align:center;border-radius:9px;background:var(--red);color:#fff;font-weight:600;vertical-align:1px}
+
+  main{max-width:1080px;margin:0 auto;padding:24px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .grow{flex:1 1 auto}
+
+  .btn{background:var(--sage);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-size:14px;cursor:pointer;transition:background .12s}
+  .btn:hover{background:var(--sage-deep)}
+  .btn.ghost{background:transparent;color:var(--sage-deep);border:1px solid var(--line)}
+  .btn.ghost:hover{background:var(--card);border-color:var(--sage)}
+  .btn.sm{padding:6px 11px;font-size:13px}
+  .btn.danger{background:transparent;color:var(--red);border:1px solid var(--red-bg)}
+  .btn.danger:hover{background:var(--red-bg)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+  .card.pad{padding:18px}
+  .section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+  .section-title h2{margin:0;font-size:19px}
+  .eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:22px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .n{font-family:"Iowan Old Style",Georgia,serif;font-size:30px;line-height:1;color:var(--sage-deep)}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:6px}
+
+  .alert{padding:13px 15px;border-radius:10px;margin-bottom:9px;border:1px solid transparent}
+  .alert-top{display:flex;gap:12px;align-items:flex-start}
+  .alert .dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:0 0 auto}
+  .alert .who{font-weight:600}
+  .alert .what{font-size:13.5px;color:var(--muted);margin-top:1px}
+  .alert .meta{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap;padding-left:10px;text-align:right}
+  .a-red{background:var(--red-bg);border-color:#E7C4BE} .a-red .dot{background:var(--red)}
+  .a-amber{background:var(--amber-bg);border-color:#E7D6AE} .a-amber .dot{background:var(--amber)}
+  .a-slate{background:var(--slate-bg);border-color:var(--line)} .a-slate .dot{background:var(--slate)}
+  .empty{padding:28px;text-align:center;color:var(--muted)}
+  .empty.ok{color:var(--sage-deep)}
+
+  .alert-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:11px;padding-top:11px;border-top:1px dashed rgba(30,42,34,.14)}
+  .people{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 auto}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:12px;white-space:nowrap}
+  .chip .rl{color:var(--muted);font-weight:600}
+  .chip .em{color:var(--sage-deep)}
+  .chip.miss{border-style:dashed;color:var(--muted);background:transparent}
+  .chip.miss .em{color:var(--red)}
+
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+     padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tbody tr[data-id]{cursor:pointer}
+  tbody tr[data-id]:hover{background:var(--paper)}
+  .name-cell{font-weight:600}
+  .sub-cell{font-size:12.5px;color:var(--muted)}
+
+  .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
+  .b-inscripto{background:var(--slate-bg);color:var(--slate)}
+  .b-admitido{background:var(--green-bg);color:var(--sage-deep)}
+  .b-prorroga{background:var(--amber-bg);color:var(--amber)}
+  .b-licencia{background:#E3E7EE;color:#3F4E63}
+  .b-baja{background:var(--red-bg);color:var(--red)}
+  .b-egresado{background:#DCE7E9;color:#2C5560}
+
+  .mini{font-size:12px;color:var(--muted)}
+  .prog{height:6px;background:var(--line);border-radius:4px;overflow:hidden;min-width:80px}
+  .prog>i{display:block;height:100%;background:var(--sage)}
+  .warn{color:var(--red);font-size:12px}
+
+  input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--sage);outline-offset:-1px;border-color:var(--sage)}
+  label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:4px;font-weight:600}
+  .field{margin-bottom:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  fieldset{border:1px solid var(--line);border-radius:10px;padding:14px 16px 4px;margin:0 0 18px}
+  legend{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-deep);font-weight:700;padding:0 6px}
+
+  .overlay{position:fixed;inset:0;background:rgba(30,42,34,.42);display:none;z-index:40;padding:22px}
+  .overlay.show{display:flex;align-items:flex-start;justify-content:center;overflow:auto}
+  .modal{background:var(--paper);border-radius:14px;width:100%;max-width:760px;box-shadow:0 18px 60px rgba(0,0,0,.28);margin:auto}
+  .modal-head{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);border-radius:14px 14px 0 0;z-index:2}
+  .modal-head h2{margin:0;font-size:20px}
+  .modal-body{padding:20px 22px}
+  .modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:16px 22px;border-top:1px solid var(--line);position:sticky;bottom:0;background:var(--paper);flex-wrap:wrap}
+  .x{margin-left:auto;background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
+
+  .prow{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px}
+  .item{display:flex;gap:10px;align-items:center;padding:9px 11px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:#fff}
+  .item .grow{min-width:0}
+  .item a{word-break:break-all}
+  .addrow{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-top:6px}
+  .addrow>div{flex:1 1 120px}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:11px 20px;border-radius:24px;font-size:14px;opacity:0;
+    transition:.25s;z-index:60;pointer-events:none;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .hint{font-size:12px;color:var(--muted);margin-top:3px}
+  .legalref{font-size:11.5px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:6px}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+  .search{max-width:260px}
+  .member{display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:start;padding:12px 14px;border-bottom:1px solid var(--line)}
+  .member:last-child{border-bottom:none}
+  .avatar{width:38px;height:38px;border-radius:50%;background:var(--green-bg);color:var(--sage-deep);display:flex;align-items:center;justify-content:center;font-weight:700;flex:0 0 auto;font-size:14px}
+
+  @media(max-width:640px){
+    .grid2{grid-template-columns:1fr}
+    .prow{grid-template-columns:1fr}
+    .hide-sm{display:none}
+    main{padding:16px}
+  }
+  @media print{header,nav,.toolbar,.btn,.x,.modal-foot,.alert-foot{display:none!important}body{background:#fff}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>Comité del Doctorado</h1>
+    <span class="sub">Ciencias Biológicas · FCEFN · UNSJ</span>
+  </div>
+  <nav id="nav">
+    <button data-tab="panel" class="active">Panel</button>
+    <button data-tab="alumnos">Doctorandos</button>
+    <button data-tab="comite">Comité</button>
+    <button data-tab="directores">Directores</button>
+    <button data-tab="archivo">Archivo</button>
+    <button data-tab="datos">Respaldo</button>
+  </nav>
+</header>
+
+<main id="app"></main>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   Almacenamiento local (localStorage). Sin nube.
+   Personas (doctorando, director, codirector, comisión, comité)
+   se guardan una por una, con nombre y email.
+============================================================ */
+const LS_KEY = 'doctorado_biologia_unsj_v1';
+
+/* ===== CONFIGURAR: pegá los datos de tu proyecto (Settings → API) ===== */
+const SUPA_URL = 'https://TU-PROYECTO.supabase.co';
+const SUPA_KEY = 'TU-ANON-KEY';
+/* ===================================================================== */
+const STATE_ID = 1;
+const sb = (window.supabase && !SUPA_URL.includes('TU-PROYECTO') && !SUPA_KEY.includes('TU-ANON'))
+  ? window.supabase.createClient(SUPA_URL, SUPA_KEY, {auth:{persistSession:true, autoRefreshToken:true}})
+  : null;
+let authed=false, currentEmail='', realtimeCh=null, pendingRemote=null;
+
+const MIEMBROS_DEFECTO = [
+  {rol:'Directora de la Carrera', nombre:'Gabriela Feresín', dni:'16.318.980', email:'', tipo:'directora'},
+  {rol:'Titular', nombre:'Natalia del Pilar Andino', dni:'26.434.030', email:'', tipo:'titular'},
+  {rol:'Titular', nombre:'Carlos Rodrigo Gómez Alés', dni:'35.474.712', email:'', tipo:'titular'},
+  {rol:'Titular', nombre:'Pierluigi Pierantozzi', dni:'19.030.924', email:'', tipo:'titular'},
+  {rol:'Titular', nombre:'María Liza López', dni:'24.829.005', email:'', tipo:'titular'},
+  {rol:'Titular', nombre:'María Jimena Trotteyn', dni:'24.192.542', email:'', tipo:'titular'},
+  {rol:'Titular', nombre:'Virginia Mercedes Pesce', dni:'30.840.830', email:'', tipo:'titular'},
+  {rol:'Suplente', nombre:'Benjamín Kuchen', dni:'32.447.621', email:'', tipo:'suplente'},
+];
+
+let db = cacheLoad();
+migrate();
+
+function cacheLoad(){
+  try{ const raw=localStorage.getItem(LS_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return {
+    alumnos:[], miembros:MIEMBROS_DEFECTO.map(m=>({...m})), seq:1,
+    actas:[
+      {id:'k1', fecha:'2026-05-22', numero:'144', titulo:'Reunión del Comité Académico', url:''},
+      {id:'k2', fecha:'2026-06-19', numero:'145', titulo:'Reunión del Comité Académico', url:''},
+    ],
+    documentos:[
+      {id:'d1', categoria:'ordenanza', numero:'029', anio:'2014', titulo:'Plan de estudio y Reglamento — Doctorado en Ciencias Biológicas', url:''},
+      {id:'d2', categoria:'resolucion', numero:'1155', anio:'2026', titulo:'Modificación de integrantes del Comité Académico', url:''},
+    ]
+  };
+}
+function cacheSave(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(db)); }catch(e){} }
+function save(){ cacheSave(); cloudPush(); }   // guarda local (instantáneo) y sube a la nube
+function uid(){ return 'a'+(db.seq++); }
+
+/* ---------- Nube (Supabase) ---------- */
+async function cloudPush(){
+  if(!sb || !authed) return;
+  try{
+    const {error}=await sb.from('dcb_state').upsert({id:STATE_ID, data:db, updated_at:new Date().toISOString()});
+    if(error) console.warn('push', error);
+  }catch(e){ console.warn(e); }
+}
+async function cloudPull(){
+  if(!sb) return false;
+  try{
+    const {data,error}=await sb.from('dcb_state').select('data').eq('id',STATE_ID).maybeSingle();
+    if(error){ console.warn('pull', error); return false; }
+    if(data && data.data){ db=data.data; migrate(); cacheSave(); return true; }
+    await cloudPush();  // primera vez: crea la fila con lo que haya (sembrado)
+    return true;
+  }catch(e){ console.warn(e); return false; }
+}
+function subscribe(){
+  if(!sb) return;
+  if(realtimeCh) sb.removeChannel(realtimeCh);
+  realtimeCh = sb.channel('dcb')
+    .on('postgres_changes',{event:'*',schema:'public',table:'dcb_state'}, payload=>{
+      const remote = payload.new && payload.new.data; if(!remote) return;
+      if(document.getElementById('overlay').classList.contains('show')){ pendingRemote=remote; return; }
+      db=remote; migrate(); cacheSave(); render(); toast('Actualizado por otro miembro');
+    }).subscribe();
+}
+
+/* ---------- Login por email (enlace mágico) ---------- */
+async function boot(){
+  if(!window.supabase){ document.body.classList.add('noauth'); app.innerHTML='<div class="card pad" style="max-width:520px;margin:40px auto"><h2>Sin conexión</h2><p class="mini">No se pudo cargar Supabase. Revisá tu conexión a internet y recargá.</p></div>'; return; }
+  if(!sb){
+    document.body.classList.add('noauth');
+    app.innerHTML=`<div class="card pad" style="max-width:600px;margin:40px auto">
+      <div class="section-title"><h2>Falta configurar Supabase</h2></div>
+      <p class="mini">Abrí este archivo con un editor y completá <b>SUPA_URL</b> y <b>SUPA_KEY</b> con los datos de tu proyecto (panel de Supabase → Settings → API). Luego corré el SQL de creación de la tabla que te pasé.</p></div>`;
+    return;
+  }
+  const {data:{session}}=await sb.auth.getSession();
+  if(session) onLogin(session); else showLogin();
+  sb.auth.onAuthStateChange((_e,sess)=>{ if(sess && !authed) onLogin(sess); else if(!sess && authed){ authed=false; showLogin(); } });
+}
+function showLogin(msg){
+  authed=false; document.body.classList.add('noauth');
+  app.innerHTML=`<div class="card pad" style="max-width:440px;margin:48px auto">
+    <div class="section-title"><span class="eyebrow">Comité Académico</span><h2 style="margin-left:6px">Ingreso</h2></div>
+    <p class="mini">Acceso para integrantes del Comité. Te enviamos un enlace de acceso a tu correo (no hace falta contraseña).</p>
+    <div class="field" style="margin-top:12px"><label>Email</label><input id="lg_email" type="email" placeholder="tu.correo@unsj.edu.ar"></div>
+    <button class="btn" id="lg_btn">Enviarme el enlace</button>
+    <div id="lg_msg" class="hint" style="margin-top:12px">${msg||''}</div>
+  </div>`;
+  document.getElementById('lg_btn').onclick=async()=>{
+    const email=document.getElementById('lg_email').value.trim();
+    if(!email){ toast('Ingresá tu email'); return; }
+    const {error}=await sb.auth.signInWithOtp({email, options:{emailRedirectTo:window.location.href}});
+    document.getElementById('lg_msg').textContent = error? ('Error: '+error.message) : 'Listo. Revisá tu correo y abrí el enlace para entrar (puede tardar un minuto).';
+  };
+}
+async function onLogin(session){
+  authed=true; currentEmail=(session.user&&session.user.email)||''; document.body.classList.remove('noauth');
+  await cloudPull(); subscribe(); render();
+}
+
+/* Migración: convierte director/codirector/comisión de texto a {nombre,email} */
+function migrate(){
+  let ch=false;
+  (db.alumnos||[]).forEach(al=>{
+    if(typeof al.director==='string'){ al.director={nombre:al.director||'',email:''}; ch=true; }
+    if(!al.director) al.director={nombre:'',email:''};
+    if(typeof al.codirector==='string'){ al.codirector={nombre:al.codirector||'',email:''}; ch=true; }
+    if(!al.codirector) al.codirector={nombre:'',email:''};
+    if(typeof al.comisionAsesora==='string'){
+      al.comisionAsesora = al.comisionAsesora.trim()? [{nombre:al.comisionAsesora.trim(),email:''}]:[]; ch=true;
+    }
+    if(!Array.isArray(al.comisionAsesora)) al.comisionAsesora=[];
+  });
+  (db.miembros||[]).forEach(m=>{ if(m.email===undefined){ m.email=''; ch=true; } });
+  if(!Array.isArray(db.actas)){ db.actas=[]; ch=true; }
+  if(!Array.isArray(db.documentos)){ db.documentos=[]; ch=true; }
+  if(ch) save();
+}
+
+/* ---------- fechas ---------- */
+const MS_DIA=86400000;
+function hoy(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+function parse(f){ if(!f) return null; const d=new Date(f+'T00:00:00'); return isNaN(d)?null:d; }
+function fmt(f){ if(!f) return '—'; const d=parse(f); if(!d) return '—';
+  return d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+function addMeses(d,m){ const x=new Date(d); x.setMonth(x.getMonth()+m); return x; }
+function addAnios(d,a){ const x=new Date(d); x.setFullYear(x.getFullYear()+a); return x; }
+function difDias(a,b){ return Math.round((a-b)/MS_DIA); }
+function iso(d){ return d.toISOString().slice(0,10); }
+function difTexto(fecha){ const dd=difDias(fecha,hoy());
+  if(dd<0) return `venció hace ${Math.abs(dd)} d`; if(dd===0) return 'vence hoy';
+  if(dd<45) return `faltan ${dd} d`; return `faltan ~${Math.round(dd/30)} m`; }
+
+/* ---------- personas involucradas ---------- */
+function involucrados(al){
+  const arr=[];
+  if(al.nombre) arr.push({rol:'Doctorando',nombre:al.nombre,email:(al.email||'').trim()});
+  if(al.director&&al.director.nombre) arr.push({rol:'Director',nombre:al.director.nombre,email:(al.director.email||'').trim()});
+  if(al.codirector&&al.codirector.nombre) arr.push({rol:'Codirector',nombre:al.codirector.nombre,email:(al.codirector.email||'').trim()});
+  (al.comisionAsesora||[]).forEach(c=>{ if(c.nombre) arr.push({rol:'Comisión asesora',nombre:c.nombre,email:(c.email||'').trim()}); });
+  return arr;
+}
+function mailtoDe(al,asunto,cuerpo){
+  const inv=involucrados(al);
+  const doc=inv.find(p=>p.rol==='Doctorando'&&p.email);
+  const to = doc? doc.email : (inv.find(p=>p.email)||{}).email || '';
+  const cc = inv.filter(p=>p.email && p.email!==to).map(p=>p.email);
+  const params=[];
+  if(cc.length) params.push('cc='+encodeURIComponent(cc.join(',')));
+  params.push('subject='+encodeURIComponent(asunto));
+  params.push('body='+encodeURIComponent(cuerpo));
+  return 'mailto:'+encodeURIComponent(to)+'?'+params.join('&');
+}
+function copiar(txt,msg){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>toast(msg)).catch(()=>fallbackCopy(txt,msg));
+  } else fallbackCopy(txt,msg);
+}
+function fallbackCopy(txt,msg){
+  const t=document.createElement('textarea'); t.value=txt; document.body.appendChild(t); t.select();
+  try{ document.execCommand('copy'); toast(msg); }catch(e){ toast('No se pudo copiar'); }
+  document.body.removeChild(t);
+}
+
+/* ============================================================
+   MOTOR DE ALERTAS (Ord. 029/14-CS)
+============================================================ */
+function alertasDe(al){
+  const out=[]; if(['baja','egresado'].includes(al.estado)) return out;
+  const notif=parse(al.fechaNotifAdmision), solic=parse(al.fechaSolicitudAdmision);
+  const mesesLic=Number(al.mesesLicencia)||0, t=hoy(), anio=t.getFullYear();
+
+  const tieneInf=(al.informes||[]).some(i=>Number(i.anio)===anio&&['presentado','aprobado','defendido'].includes(i.estado));
+  if(notif&&!tieneInf&&difDias(t,notif)>60){
+    const limDef=new Date(anio,10,30), inicioObl=new Date(anio,7,31);
+    if(t>limDef) out.push(a('red',al,`Informe anual ${anio} sin presentar`,'Venció el 30/11 (Art. 27.A)','Informe anual'));
+    else if(t>=new Date(anio,6,1)) out.push(a('amber',al,`Informe anual ${anio} pendiente`,t>=inicioObl?'Vencía el 31/08 (Art. 27.A)':'Se presenta el 31/08 (Art. 27.A)','Informe anual'));
+  }
+  if((al.informes||[]).filter(i=>i.estado==='rechazado').length>=2)
+    out.push(a('red',al,'Dos informes anuales rechazados','Corresponde exclusión (Art. 27.F)','Exclusión'));
+
+  if(notif){
+    const pror=(al.prorrogas||[]).reduce((s,p)=>s+(Number(p.anios)||1),0);
+    let lim=addMeses(addAnios(addAnios(notif,5),pror),mesesLic);
+    const dd=difDias(lim,t);
+    if(dd<0) out.push(a('red',al,'Plazo máximo de tesis vencido',`Límite ${fmt(iso(lim))} (Art. 4)`,'Plazo tesis',lim));
+    else if(dd<=60) out.push(a('amber',al,'Ventana para pedir prórroga',`Se pide 2 meses antes del ${fmt(iso(lim))} (Art. 29)`,'Prórroga',lim));
+    else if(dd<=180) out.push(a('slate',al,'Plazo de tesis próximo',`Límite ${fmt(iso(lim))} (Art. 4)`,'Plazo tesis',lim));
+  }
+  if(al.nivelacionRequerida&&!al.nivelacionAprobada&&notif){
+    const lim=addMeses(notif,18), dd=difDias(lim,t);
+    if(dd<0) out.push(a('red',al,'Nivelación no aprobada en término',`Baja automática (Art. 15) · límite ${fmt(iso(lim))}`,'Nivelación',lim));
+    else if(dd<=120) out.push(a('amber',al,'Nivelación pendiente',`Límite ${fmt(iso(lim))} — 18 m (Art. 15)`,'Nivelación',lim));
+  }
+  if(!al.planDefinitivoAprobado&&solic){
+    const lim=addAnios(solic,2), dd=difDias(lim,t);
+    if(dd<0) out.push(a('red',al,'Plan definitivo de tesis sin aprobar',`Vencido el ${fmt(iso(lim))} (Art. 14.E)`,'Plan de tesis',lim));
+    else if(dd<=150) out.push(a('amber',al,'Plan definitivo de tesis pendiente',`Límite ${fmt(iso(lim))} — 2 años (Art. 14.E)`,'Plan de tesis',lim));
+  }
+  const cO=Number(al.creditosObligatorios)||0,cE=Number(al.creditosEspecificos)||0;
+  if(['admitido','prorroga'].includes(al.estado)&&(cO<12||cE<24))
+    out.push(a('slate',al,'Créditos en curso',`Obligatorios ${cO}/12 · Específicos ${cE}/24 (Art. 3)`,'Créditos'));
+
+  if(al.estado!=='inscripto'&&!notif)
+    out.push(a('slate',al,'Falta fecha de notificación de admisión','Sin ese dato no se controlan los plazos','Dato faltante'));
+
+  const sinMail=involucrados(al).filter(p=>!p.email).map(p=>`${p.rol}: ${p.nombre}`);
+  if(sinMail.length)
+    out.push(a('slate',al,'Faltan correos oficiales',sinMail.join(' · '),'Correos'));
+  return out;
+}
+function a(nivel,al,titulo,detalle,tag,fechaLim){
+  return {nivel,orden:{red:0,amber:1,slate:2}[nivel],alumnoId:al.id,alumno:al.nombre,
+          titulo,detalle,tag,fechaLim:fechaLim?iso(fechaLim):null};
+}
+function todasLasAlertas(){
+  let l=[]; db.alumnos.forEach(al=> l=l.concat(alertasDe(al)));
+  l.sort((x,y)=> x.orden-y.orden || ((x.fechaLim||'9')<(y.fechaLim||'9')?-1:1));
+  return l;
+}
+
+/* ============================================================
+   RENDER
+============================================================ */
+let TAB='panel', filtro='';
+const app=document.getElementById('app'), nav=document.getElementById('nav');
+nav.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return;
+  TAB=b.dataset.tab; [...nav.children].forEach(x=>x.classList.toggle('active',x===b)); render(); });
+
+function render(){
+  updateBadges();
+  ({panel:renderPanel,alumnos:renderAlumnos,comite:renderComite,directores:renderDirectores,archivo:renderArchivo,datos:renderDatos}[TAB])();
+}
+function updateBadges(){
+  const n=todasLasAlertas().filter(x=>x.nivel!=='slate').length;
+  nav.querySelector('[data-tab="panel"]').innerHTML='Panel'+(n?` <span class="count">${n}</span>`:'');
+}
+
+/* -------- PANEL -------- */
+function renderPanel(){
+  const al=todasLasAlertas();
+  const rojas=al.filter(x=>x.nivel==='red').length, ambar=al.filter(x=>x.nivel==='amber').length;
+  const activos=db.alumnos.filter(x=>!['baja','egresado'].includes(x.estado)).length;
+  const egres=db.alumnos.filter(x=>x.estado==='egresado').length;
+  app.innerHTML=`
+    <div class="stats">
+      <div class="stat"><div class="n">${db.alumnos.length}</div><div class="l">Doctorandos registrados</div></div>
+      <div class="stat"><div class="n">${activos}</div><div class="l">Activos</div></div>
+      <div class="stat"><div class="n" style="color:var(--red)">${rojas}</div><div class="l">Pendientes vencidos</div></div>
+      <div class="stat"><div class="n" style="color:var(--amber)">${ambar}</div><div class="l">Por vencer</div></div>
+      <div class="stat"><div class="n">${egres}</div><div class="l">Egresados</div></div>
+    </div>
+    <div class="card pad">
+      <div class="section-title"><span class="eyebrow">Al día de hoy</span><h2 style="margin-left:6px">Qué hay que atender · a quién avisar</h2></div>
+      <div id="alertList"></div>
+    </div>`;
+  const cont=document.getElementById('alertList');
+  if(!al.length){
+    cont.innerHTML=db.alumnos.length?`<div class="empty ok">Sin pendientes. Todo en regla según los plazos cargados.</div>`
+      :`<div class="empty">Todavía no hay doctorandos cargados. Andá a <b>Doctorandos → Agregar</b>.</div>`;
+    return;
+  }
+  cont.innerHTML=al.map((x,i)=>{
+    const alu=db.alumnos.find(z=>z.id===x.alumnoId);
+    const inv=involucrados(alu);
+    const chips=inv.map(p=>`<span class="chip ${p.email?'':'miss'}"><span class="rl">${esc(p.rol)}</span> ${esc(p.nombre)} · <span class="em">${p.email?esc(p.email):'falta email'}</span></span>`).join('');
+    const hayMail=inv.some(p=>p.email);
+    return `<div class="alert a-${x.nivel}">
+      <div class="alert-top">
+        <span class="dot"></span>
+        <div class="grow"><div class="who">${esc(x.alumno||'(sin nombre)')}</div>
+          <div class="what"><b>${esc(x.titulo)}.</b> ${esc(x.detalle)}</div></div>
+        <div class="meta">${esc(x.tag)}${x.fechaLim?`<br>${difTexto(parse(x.fechaLim))}`:''}</div>
+      </div>
+      <div class="alert-foot">
+        <div class="people">${chips||'<span class="mini">Sin personas cargadas</span>'}</div>
+        ${hayMail?`<button class="btn ghost sm" data-act="copiar" data-i="${i}">Copiar correos</button>
+          <button class="btn sm" data-act="mail" data-i="${i}">Escribir mail</button>`:''}
+        <button class="btn ghost sm" data-act="ficha" data-i="${i}">Ver ficha</button>
+      </div>
+    </div>`;
+  }).join('');
+  cont.querySelectorAll('[data-act]').forEach(b=>{
+    const x=al[Number(b.dataset.i)], alu=db.alumnos.find(z=>z.id===x.alumnoId);
+    b.onclick=()=>{
+      if(b.dataset.act==='ficha') return abrirFicha(alu.id);
+      if(b.dataset.act==='copiar'){
+        const em=involucrados(alu).filter(p=>p.email).map(p=>p.email);
+        return copiar(em.join(', '), em.length+' correo(s) copiados');
+      }
+      if(b.dataset.act==='mail'){
+        const asunto=`[Doctorado Cs. Biológicas UNSJ] ${x.titulo} — ${alu.nombre}`;
+        const cuerpo=`${x.titulo}.\n${x.detalle}\n\nDoctorando: ${alu.nombre}\n\n(Mensaje generado desde el panel del Comité Académico.)`;
+        window.location.href=mailtoDe(alu,asunto,cuerpo);
+      }
+    };
+  });
+}
+
+/* -------- DOCTORANDOS -------- */
+function renderAlumnos(){
+  app.innerHTML=`
+    <div class="toolbar">
+      <button class="btn" id="add">+ Agregar doctorando</button>
+      <input class="search grow" id="search" placeholder="Buscar por nombre, DNI o director" value="${esc(filtro)}">
+    </div>
+    <div class="card"><table>
+      <thead><tr><th>Doctorando</th><th class="hide-sm">Estado</th><th class="hide-sm">Director</th><th class="hide-sm">Créditos</th><th>Pendientes</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table></div>`;
+  document.getElementById('add').onclick=()=>abrirFicha(null);
+  const s=document.getElementById('search'); s.oninput=()=>{ filtro=s.value; pintarTabla(); s.focus(); };
+  pintarTabla();
+}
+function pintarTabla(){
+  const tb=document.getElementById('tb'); if(!tb) return;
+  const f=filtro.toLowerCase().trim();
+  const lista=db.alumnos.filter(al=>!f||[al.nombre,al.dni,al.director&&al.director.nombre,al.codirector&&al.codirector.nombre].some(v=>(v||'').toLowerCase().includes(f)));
+  if(!lista.length){ tb.innerHTML=`<tr><td colspan="5" class="empty">Sin resultados.</td></tr>`; return; }
+  tb.innerHTML=lista.map(al=>{
+    const nA=alertasDe(al).filter(x=>x.nivel!=='slate').length;
+    const cO=Number(al.creditosObligatorios)||0,cE=Number(al.creditosEspecificos)||0;
+    const pct=Math.round(((Math.min(cO,12)+Math.min(cE,24))/36)*100);
+    return `<tr data-id="${al.id}">
+      <td><div class="name-cell">${esc(al.nombre||'(sin nombre)')}</div>
+        <div class="sub-cell">${al.dni?'DNI '+esc(al.dni):''}${al.temaTesis?' · '+esc(al.temaTesis):''}</div></td>
+      <td class="hide-sm">${badge(al.estado)}</td>
+      <td class="hide-sm sub-cell">${esc((al.director&&al.director.nombre)||'—')}</td>
+      <td class="hide-sm"><div class="prog"><i style="width:${pct}%"></i></div><div class="mini">${cO+cE}/36</div></td>
+      <td>${nA?`<span class="badge b-baja">${nA} aviso${nA>1?'s':''}</span>`:`<span class="mini">—</span>`}</td>
+    </tr>`;
+  }).join('');
+  tb.querySelectorAll('tr[data-id]').forEach(tr=> tr.onclick=()=>abrirFicha(tr.dataset.id));
+}
+
+/* -------- FICHA -------- */
+function abrirFicha(id){
+  const al=id?db.alumnos.find(x=>x.id===id):nuevoAlumno();
+  const esNuevo=!id;
+  const nombres=todosLosNombres();
+  const m=document.getElementById('modal');
+  m.innerHTML=`
+    <div class="modal-head"><h2>${esNuevo?'Nuevo doctorando':esc(al.nombre||'Ficha')}</h2><button class="x" id="cerrar">×</button></div>
+    <div class="modal-body">
+      <datalist id="nombreslist">${nombres.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+
+      <fieldset><legend>Doctorando</legend>
+        <div class="grid2">
+          <div class="field"><label>Nombre y apellido</label><input id="f_nombre" value="${esc(al.nombre)}"></div>
+          <div class="field"><label>DNI</label><input id="f_dni" value="${esc(al.dni)}"></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label>Email (oficial)</label><input id="f_email" value="${esc(al.email)}" placeholder="obligatorio para avisos"></div>
+          <div class="field"><label>Estado</label><select id="f_estado">
+            ${['inscripto','admitido','prorroga','licencia','baja','egresado'].map(e=>`<option value="${e}" ${al.estado===e?'selected':''}>${estadoLabel(e)}</option>`).join('')}
+          </select></div>
+        </div>
+        <div class="field"><label>Tema / título preliminar de tesis</label><input id="f_tema" value="${esc(al.temaTesis)}"></div>
+      </fieldset>
+
+      <fieldset><legend>Fechas y plazos</legend>
+        <div class="grid2">
+          <div class="field"><label>Solicitud de admisión</label><input type="date" id="f_solic" value="${esc(al.fechaSolicitudAdmision)}">
+            <div class="hint">Base del plan definitivo (2 años, Art. 14.E)</div></div>
+          <div class="field"><label>Notificación de admisión</label><input type="date" id="f_notif" value="${esc(al.fechaNotifAdmision)}">
+            <div class="hint">Inicio del plazo de tesis (5 años, Art. 4) y nivelación (18 m, Art. 15)</div></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label>Meses de licencia acumulados</label><input type="number" min="0" id="f_lic" value="${al.mesesLicencia||0}">
+            <div class="hint">Suspende plazos (Art. 27.B). Máx. 3 años.</div></div>
+          <div class="field"><label>&nbsp;</label>
+            <label style="font-weight:400"><input type="checkbox" id="f_planok" style="width:auto" ${al.planDefinitivoAprobado?'checked':''}> Plan definitivo de tesis aprobado</label></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label style="font-weight:400"><input type="checkbox" id="f_nivreq" style="width:auto" ${al.nivelacionRequerida?'checked':''}> Requiere nivelación (Art. 15)</label></div>
+          <div class="field"><label style="font-weight:400"><input type="checkbox" id="f_nivok" style="width:auto" ${al.nivelacionAprobada?'checked':''}> Nivelación aprobada</label></div>
+        </div>
+      </fieldset>
+
+      <fieldset><legend>Dirección</legend>
+        <label>Director</label>
+        <div class="prow"><input id="dir_n" list="nombreslist" placeholder="Nombre" value="${esc(al.director.nombre)}">
+          <input id="dir_e" placeholder="Email" value="${esc(al.director.email)}"><span></span></div>
+        <label>Codirector</label>
+        <div class="prow"><input id="cod_n" list="nombreslist" placeholder="Nombre" value="${esc(al.codirector.nombre)}">
+          <input id="cod_e" placeholder="Email" value="${esc(al.codirector.email)}"><span></span></div>
+      </fieldset>
+
+      <fieldset><legend>Comisión asesora de tesis (Art. 21)</legend>
+        <div id="comision"></div>
+        <button class="btn ghost sm" id="com_add">+ Agregar integrante</button>
+        <div class="hint">Constituida por 3 miembros; el director la preside (Art. 21).</div>
+      </fieldset>
+
+      <fieldset><legend>Créditos (Art. 3)</legend>
+        <div class="grid2">
+          <div class="field"><label>Obligatorios (de 12)</label><input type="number" min="0" max="12" id="f_cO" value="${al.creditosObligatorios||0}"></div>
+          <div class="field"><label>Específicos (de 24)</label><input type="number" min="0" id="f_cE" value="${al.creditosEspecificos||0}"></div>
+        </div>
+      </fieldset>
+
+      <fieldset><legend>Informes anuales (Art. 27)</legend>
+        <div id="informes"></div>
+        <div class="addrow">
+          <div><label>Año</label><input type="number" id="i_anio" value="${new Date().getFullYear()}"></div>
+          <div><label>Fecha</label><input type="date" id="i_fecha"></div>
+          <div><label>Estado</label><select id="i_estado">
+            <option value="presentado">Presentado</option><option value="defendido">Defendido</option>
+            <option value="aprobado">Aprobado</option><option value="rechazado">Rechazado</option><option value="pendiente">Pendiente</option>
+          </select></div>
+          <button class="btn sm" id="i_add">Agregar</button>
+        </div>
+      </fieldset>
+
+      <fieldset><legend>Documentos (links a Drive / OneDrive)</legend>
+        <div id="links"></div>
+        <div class="addrow">
+          <div><label>Descripción</label><input id="l_titulo" placeholder="Plan de tesis, CV, acta…"></div>
+          <div style="flex:2 1 220px"><label>Link</label><input id="l_url" placeholder="https://drive.google.com/…"></div>
+          <button class="btn sm" id="l_add">Agregar link</button>
+        </div>
+        <div class="hint">Subí el PDF a una carpeta compartida y pegá acá el enlace.</div>
+      </fieldset>
+
+      <div class="field"><label>Notas del comité</label><textarea id="f_notas" rows="3">${esc(al.notas)}</textarea></div>
+    </div>
+    <div class="modal-foot">
+      ${esNuevo?'':'<button class="btn danger" id="eliminar">Eliminar</button>'}
+      <button class="btn ghost" id="cancelar">Cancelar</button>
+      <button class="btn" id="guardar">Guardar</button>
+    </div>`;
+  document.getElementById('overlay').classList.add('show'); document.body.style.overflow='hidden';
+
+  const draft=JSON.parse(JSON.stringify(al));
+  pintarComision(draft); pintarInformes(draft); pintarLinks(draft);
+
+  // autocompletar email desde otras fichas
+  autoMail('dir_n','dir_e'); autoMail('cod_n','cod_e');
+
+  document.getElementById('com_add').onclick=()=>{ draft.comisionAsesora=draft.comisionAsesora||[];
+    draft.comisionAsesora.push({nombre:'',email:''}); pintarComision(draft); };
+  document.getElementById('i_add').onclick=()=>{
+    const anio=document.getElementById('i_anio').value; if(!anio)return;
+    draft.informes=draft.informes||[];
+    draft.informes.push({anio:Number(anio),fecha:document.getElementById('i_fecha').value,estado:document.getElementById('i_estado').value});
+    draft.informes.sort((a,b)=>b.anio-a.anio); pintarInformes(draft);
+  };
+  document.getElementById('l_add').onclick=()=>{
+    const url=document.getElementById('l_url').value.trim(), tit=document.getElementById('l_titulo').value.trim();
+    if(!url){ toast('Pegá un link'); return; }
+    draft.links=draft.links||[]; draft.links.push({titulo:tit||'Documento',url});
+    document.getElementById('l_url').value=''; document.getElementById('l_titulo').value=''; pintarLinks(draft);
+  };
+
+  document.getElementById('guardar').onclick=()=>{
+    // recoger comisión desde el DOM
+    const com=[]; document.querySelectorAll('#comision .prow').forEach(r=>{
+      const n=r.querySelector('.cn').value.trim(), e=r.querySelector('.ce').value.trim();
+      if(n||e) com.push({nombre:n,email:e});
+    });
+    Object.assign(al,{
+      nombre:val('f_nombre'),dni:val('f_dni'),email:val('f_email').trim(),estado:val('f_estado'),temaTesis:val('f_tema'),
+      fechaSolicitudAdmision:val('f_solic'),fechaNotifAdmision:val('f_notif'),mesesLicencia:Number(val('f_lic'))||0,
+      planDefinitivoAprobado:chk('f_planok'),nivelacionRequerida:chk('f_nivreq'),nivelacionAprobada:chk('f_nivok'),
+      director:{nombre:val('dir_n').trim(),email:val('dir_e').trim()},
+      codirector:{nombre:val('cod_n').trim(),email:val('cod_e').trim()},
+      comisionAsesora:com,
+      creditosObligatorios:Number(val('f_cO'))||0,creditosEspecificos:Number(val('f_cE'))||0,
+      informes:draft.informes||[],links:draft.links||[],notas:val('f_notas')
+    });
+    if(esNuevo) db.alumnos.push(al);
+    db.alumnos.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+    save(); cerrarModal(); toast(esNuevo?'Doctorando agregado':'Cambios guardados'); render();
+  };
+  if(!esNuevo) document.getElementById('eliminar').onclick=()=>{
+    if(confirm('¿Eliminar a '+al.nombre+'?')){ db.alumnos=db.alumnos.filter(x=>x.id!==al.id); save(); cerrarModal(); toast('Eliminado'); render(); }
+  };
+  document.getElementById('cancelar').onclick=cerrarModal;
+  document.getElementById('cerrar').onclick=cerrarModal;
+}
+function autoMail(nId,eId){
+  const n=document.getElementById(nId), e=document.getElementById(eId);
+  n.addEventListener('change',()=>{ if(!e.value.trim()){ const m=emailDe(n.value.trim()); if(m) e.value=m; } });
+}
+function pintarComision(draft){
+  const c=document.getElementById('comision'); const arr=draft.comisionAsesora||[];
+  c.innerHTML=arr.length? arr.map((p,idx)=>`
+    <div class="prow">
+      <input class="cn" list="nombreslist" placeholder="Nombre" value="${esc(p.nombre)}" data-i="${idx}">
+      <input class="ce" placeholder="Email" value="${esc(p.email)}" data-i="${idx}">
+      <button class="btn sm ghost" data-del="${idx}">Quitar</button>
+    </div>`).join('') : `<div class="hint" style="margin-bottom:8px">Sin integrantes cargados.</div>`;
+  c.querySelectorAll('.cn').forEach(inp=> inp.addEventListener('change',()=>{
+    const row=inp.closest('.prow'), e=row.querySelector('.ce');
+    if(!e.value.trim()){ const m=emailDe(inp.value.trim()); if(m) e.value=m; }
+    arr[inp.dataset.i].nombre=inp.value;
+  }));
+  c.querySelectorAll('.ce').forEach(inp=> inp.addEventListener('input',()=> arr[inp.dataset.i].email=inp.value));
+  c.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ arr.splice(Number(b.dataset.del),1); pintarComision(draft); });
+}
+function pintarInformes(draft){
+  const c=document.getElementById('informes'); const arr=draft.informes||[];
+  c.innerHTML=arr.length? arr.map((i,idx)=>`<div class="item"><div class="grow"><b>${i.anio}</b> · ${estadoInformeLabel(i.estado)} ${i.fecha?'· '+fmt(i.fecha):''}</div><button class="btn sm ghost" data-i="${idx}">Quitar</button></div>`).join('') : `<div class="hint">Sin informes cargados.</div>`;
+  c.querySelectorAll('button').forEach(b=> b.onclick=()=>{ arr.splice(Number(b.dataset.i),1); pintarInformes(draft); });
+}
+function pintarLinks(draft){
+  const c=document.getElementById('links'); const arr=draft.links||[];
+  c.innerHTML=arr.length? arr.map((l,idx)=>`<div class="item"><div class="grow"><b>${esc(l.titulo)}</b><br><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.url)}</a></div><button class="btn sm ghost" data-i="${idx}">Quitar</button></div>`).join('') : `<div class="hint">Sin documentos vinculados.</div>`;
+  c.querySelectorAll('button').forEach(b=> b.onclick=()=>{ arr.splice(Number(b.dataset.i),1); pintarLinks(draft); });
+}
+
+/* -------- COMITÉ -------- */
+function renderComite(){
+  const mails=db.miembros.filter(m=>m.email).map(m=>m.email);
+  app.innerHTML=`
+    <div class="card pad">
+      <div class="section-title"><span class="eyebrow">Resol. 1155/2026-FCEFN</span><h2 style="margin-left:6px">Integrantes del Comité Académico</h2></div>
+      <div id="miembros"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn ghost sm" id="addm">+ Agregar integrante</button>
+        <button class="btn ghost sm" id="copym">Copiar correos del comité</button>
+        <button class="btn ghost sm" id="resetm">Restaurar según resolución</button>
+      </div>
+      <div class="legalref">El Comité se integra con la Directora más seis profesores investigadores (Art. 10). Permanencia: 3 años, renovable hasta 2 períodos, renovación por mitades (Art. 10.C).</div>
+    </div>`;
+  pintarMiembros();
+  document.getElementById('addm').onclick=()=>{ db.miembros.push({rol:'Titular',nombre:'',dni:'',email:'',tipo:'titular'}); save(); pintarMiembros(); };
+  document.getElementById('copym').onclick=()=>{ if(!mails.length){toast('No hay correos cargados');return;} copiar(mails.join(', '), mails.length+' correo(s) copiados'); };
+  document.getElementById('resetm').onclick=()=>{ if(confirm('¿Restaurar la lista según la Resol. 1155/2026? Se pierden los emails cargados.')){ db.miembros=MIEMBROS_DEFECTO.map(m=>({...m})); save(); pintarMiembros(); toast('Lista restaurada'); } };
+}
+function pintarMiembros(){
+  const c=document.getElementById('miembros');
+  c.innerHTML=db.miembros.map((m,idx)=>`
+    <div class="member">
+      <div class="avatar">${iniciales(m.nombre)}</div>
+      <div>
+        <input value="${esc(m.nombre)}" data-k="nombre" data-i="${idx}" placeholder="Nombre y apellido" style="margin-bottom:6px">
+        <div class="grid2">
+          <input value="${esc(m.email)}" data-k="email" data-i="${idx}" placeholder="Email">
+          <input value="${esc(m.rol)}" data-k="rol" data-i="${idx}" placeholder="Rol">
+        </div>
+      </div>
+      <button class="btn sm danger" data-del="${idx}">Quitar</button>
+    </div>`).join('');
+  c.querySelectorAll('input').forEach(inp=> inp.onchange=()=>{ db.miembros[inp.dataset.i][inp.dataset.k]=inp.value; save(); });
+  c.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ db.miembros.splice(Number(b.dataset.del),1); save(); pintarMiembros(); });
+}
+
+/* -------- DIRECTORES -------- */
+function renderDirectores(){
+  const map={};
+  db.alumnos.forEach(al=>{
+    [['director',al.director],['codirector',al.codirector]].forEach(([rol,p])=>{
+      if(!p||!p.nombre) return;
+      const k=p.nombre; map[k]=map[k]||{nombre:p.nombre,email:p.email||'',dirige:[],codirige:[]};
+      if(!map[k].email&&p.email) map[k].email=p.email;
+      map[k][rol==='director'?'dirige':'codirige'].push(al.nombre);
+    });
+  });
+  const dirs=Object.values(map).sort((a,b)=>a.nombre.localeCompare(b.nombre));
+  app.innerHTML=`
+    <div class="card pad">
+      <div class="section-title"><span class="eyebrow">Derivado de los doctorandos</span><h2 style="margin-left:6px">Directores y codirectores</h2></div>
+      ${dirs.length?`<table><thead><tr><th>Nombre</th><th>Email</th><th>Dirige</th><th>Codirige</th></tr></thead>
+        <tbody>${dirs.map(d=>`<tr>
+          <td class="name-cell">${esc(d.nombre)}</td>
+          <td class="sub-cell">${d.email?esc(d.email):'<span class="warn">falta email</span>'}</td>
+          <td class="sub-cell">${d.dirige.map(esc).join(', ')||'—'}</td>
+          <td class="sub-cell">${d.codirige.map(esc).join(', ')||'—'}</td>
+        </tr>`).join('')}</tbody></table>
+        <div class="row" style="margin-top:12px"><button class="btn ghost sm" id="copyd">Copiar correos de directores</button></div>`
+      :`<div class="empty">Todavía no hay directores cargados. Se completan al asignarlos en cada doctorando.</div>`}
+      <div class="legalref">Requisitos del director (Art. 17): grado de Doctor o mérito equivalente, publicaciones con referato y capacidad probada de formación de recursos humanos. El jurado de tesis excluye al director (Art. 3.C).</div>
+    </div>`;
+  const btn=document.getElementById('copyd');
+  if(btn) btn.onclick=()=>{ const em=dirs.filter(d=>d.email).map(d=>d.email); if(!em.length){toast('No hay correos');return;} copiar(em.join(', '),em.length+' correo(s) copiados'); };
+}
+
+/* -------- RESPALDO -------- */
+function renderDatos(){
+  app.innerHTML=`
+    <div class="card pad">
+      <div class="section-title"><h2>Sesión y respaldo</h2></div>
+      <p class="mini">Conectado como <b id="who"></b>. Los datos se guardan en la nube (Supabase) y se comparten con el Comité en vivo. El export es un respaldo extra.</p>
+      <div class="row" style="margin:10px 0"><button class="btn ghost sm" id="logout">Cerrar sesión</button></div>
+      <div class="row" style="margin:16px 0">
+        <button class="btn" id="exp">Exportar datos (.json)</button>
+        <button class="btn ghost" id="impBtn">Importar datos</button>
+        <input type="file" id="imp" accept="application/json" style="display:none">
+        <button class="btn ghost" id="print">Imprimir panel</button>
+      </div>
+      <div class="legalref">Importar <b>reemplaza</b> todo lo cargado. Exportá antes si tenés dudas.</div>
+      <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
+      <button class="btn danger" id="wipe">Borrar todo y empezar de cero</button>
+    </div>`;
+  document.getElementById('exp').onclick=exportar;
+  document.getElementById('impBtn').onclick=()=>document.getElementById('imp').click();
+  document.getElementById('imp').onchange=importar;
+  const w=document.getElementById('who'); if(w) w.textContent=currentEmail||'—';
+  document.getElementById('logout').onclick=async()=>{ if(sb) await sb.auth.signOut(); };
+  document.getElementById('print').onclick=()=>{ TAB='panel'; [...nav.children].forEach(x=>x.classList.toggle('active',x.dataset.tab==='panel')); render(); setTimeout(()=>window.print(),120); };
+  document.getElementById('wipe').onclick=()=>{ if(confirm('Esto borra la base COMPARTIDA de todo el Comité (todos los doctorandos) y restaura el comité inicial. ¿Seguro?')){ localStorage.removeItem(LS_KEY); db=cacheLoad(); migrate(); save(); toast('Base reiniciada'); render(); } };
+}
+function exportar(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob), a=document.createElement('a');
+  a.href=url; a.download='doctorado-biologia-'+iso(new Date())+'.json'; a.click(); URL.revokeObjectURL(url); toast('Datos exportados');
+}
+function importar(e){
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ const data=JSON.parse(r.result); if(!data.alumnos) throw 0;
+    db=data; db.seq=db.seq||(db.alumnos.length+1); migrate(); save(); render(); toast('Datos importados');
+  }catch(err){ toast('Archivo no válido'); } };
+  r.readAsText(file);
+}
+
+/* -------- ARCHIVO (actas + documentos institucionales) -------- */
+const CAT_DOC={resolucion:'Resolución',ordenanza:'Ordenanza',expediente:'Expediente',nota:'Nota',dictamen:'Dictamen',otro:'Otro'};
+function renderArchivo(){
+  app.innerHTML=`
+    <div class="card pad" style="margin-bottom:18px">
+      <div class="section-title"><span class="eyebrow">Reuniones del Comité / Doctorado</span><h2 style="margin-left:6px">Actas</h2></div>
+      <div id="actasList"></div>
+      <div class="addrow">
+        <div><label>Fecha</label><input type="date" id="ac_fecha"></div>
+        <div><label>N° de acta</label><input id="ac_num" placeholder="145"></div>
+        <div style="flex:2 1 200px"><label>Tema / resumen</label><input id="ac_tit" placeholder="Aceptación de renuncias…"></div>
+        <div style="flex:2 1 220px"><label>Link (Word o PDF)</label><input id="ac_url" placeholder="https://drive.google.com/…"></div>
+        <button class="btn sm" id="ac_add">Agregar acta</button>
+      </div>
+      <div class="hint">Subí el Word/PDF a una carpeta de Drive y pegá el enlace para compartir.</div>
+    </div>
+
+    <div class="card pad">
+      <div class="section-title"><span class="eyebrow">Resoluciones · Ordenanzas · Expedientes</span><h2 style="margin-left:6px">Documentos institucionales</h2></div>
+      <div id="docsList"></div>
+      <div class="addrow">
+        <div><label>Tipo</label><select id="dc_tipo">${Object.entries(CAT_DOC).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+        <div><label>N°</label><input id="dc_num" placeholder="1155"></div>
+        <div><label>Año</label><input id="dc_anio" placeholder="2026"></div>
+        <div style="flex:2 1 200px"><label>Descripción</label><input id="dc_tit" placeholder="Designación de tribunal…"></div>
+        <div style="flex:2 1 220px"><label>Link (PDF)</label><input id="dc_url" placeholder="https://drive.google.com/…"></div>
+        <button class="btn sm" id="dc_add">Agregar</button>
+      </div>
+      <div class="hint">Quedan sembradas la Ord. 029/14-CS y la Resol. 1155/2026; pegales el link cuando las tengas en Drive.</div>
+    </div>`;
+  pintarActas(); pintarDocs();
+
+  document.getElementById('ac_add').onclick=()=>{
+    const fecha=val('ac_fecha'), num=val('ac_num').trim(), tit=val('ac_tit').trim(), url=val('ac_url').trim();
+    if(!num&&!fecha&&!tit){ toast('Cargá al menos la fecha o el número'); return; }
+    db.actas.push({id:uid(),fecha,numero:num,titulo:tit||'Reunión',url}); save(); pintarActas();
+    ['ac_fecha','ac_num','ac_tit','ac_url'].forEach(i=>document.getElementById(i).value='');
+    toast('Acta agregada');
+  };
+  document.getElementById('dc_add').onclick=()=>{
+    const url=val('dc_url').trim();
+    db.documentos.push({id:uid(),categoria:val('dc_tipo'),numero:val('dc_num').trim(),anio:val('dc_anio').trim(),titulo:val('dc_tit').trim()||'Documento',url});
+    save(); pintarDocs();
+    ['dc_num','dc_anio','dc_tit','dc_url'].forEach(i=>document.getElementById(i).value='');
+    toast('Documento agregado');
+  };
+}
+function pintarActas(){
+  const c=document.getElementById('actasList');
+  const arr=[...db.actas].sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||'')||(Number(b.numero)||0)-(Number(a.numero)||0));
+  c.innerHTML=arr.length? arr.map(k=>`
+    <div class="item">
+      <div class="grow"><b>Acta ${esc(k.numero||'—')}</b> · ${fmt(k.fecha)} · ${esc(k.titulo)}<br>
+        ${k.url?`<a href="${esc(k.url)}" target="_blank" rel="noopener">${esc(k.url)}</a>`:'<span class="warn">sin link cargado</span>'}</div>
+      <button class="btn sm ghost" data-del="${k.id}">Quitar</button>
+    </div>`).join('') : `<div class="hint">Sin actas cargadas.</div>`;
+  c.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ db.actas=db.actas.filter(x=>x.id!==b.dataset.del); save(); pintarActas(); });
+}
+function pintarDocs(){
+  const c=document.getElementById('docsList');
+  const arr=[...db.documentos].sort((a,b)=>(b.anio||'').localeCompare(a.anio||''));
+  c.innerHTML=arr.length? arr.map(d=>`
+    <div class="item">
+      <div class="grow"><b>${esc(CAT_DOC[d.categoria]||'Documento')} ${esc(d.numero||'')}${d.anio?'/'+esc(d.anio):''}</b> · ${esc(d.titulo)}<br>
+        ${d.url?`<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.url)}</a>`:'<span class="warn">sin link cargado</span>'}</div>
+      <button class="btn sm ghost" data-del="${d.id}">Quitar</button>
+    </div>`).join('') : `<div class="hint">Sin documentos cargados.</div>`;
+  c.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ db.documentos=db.documentos.filter(x=>x.id!==b.dataset.del); save(); pintarDocs(); });
+}
+
+/* ============================================================
+   Helpers
+============================================================ */
+function nuevoAlumno(){
+  return {id:uid(),nombre:'',dni:'',email:'',estado:'inscripto',temaTesis:'',
+    fechaSolicitudAdmision:'',fechaNotifAdmision:'',mesesLicencia:0,
+    planDefinitivoAprobado:false,nivelacionRequerida:false,nivelacionAprobada:false,
+    director:{nombre:'',email:''},codirector:{nombre:'',email:''},comisionAsesora:[],
+    creditosObligatorios:0,creditosEspecificos:0,informes:[],links:[],notas:''};
+}
+function contactIndex(){
+  const idx={}; const add=(n,e)=>{ n=(n||'').trim(); e=(e||'').trim(); if(n&&e&&!idx[n]) idx[n]=e; };
+  db.miembros.forEach(m=>add(m.nombre,m.email));
+  db.alumnos.forEach(al=>{ add(al.nombre,al.email); if(al.director)add(al.director.nombre,al.director.email);
+    if(al.codirector)add(al.codirector.nombre,al.codirector.email); (al.comisionAsesora||[]).forEach(c=>add(c.nombre,c.email)); });
+  return idx;
+}
+function emailDe(nombre){ return contactIndex()[(nombre||'').trim()]||''; }
+function todosLosNombres(){
+  const s=new Set(); db.miembros.forEach(m=>m.nombre&&s.add(m.nombre));
+  db.alumnos.forEach(al=>{ if(al.director&&al.director.nombre)s.add(al.director.nombre);
+    if(al.codirector&&al.codirector.nombre)s.add(al.codirector.nombre);
+    (al.comisionAsesora||[]).forEach(c=>c.nombre&&s.add(c.nombre)); });
+  return [...s].sort();
+}
+function estadoLabel(e){return {inscripto:'Inscripto',admitido:'Admitido',prorroga:'En prórroga',licencia:'En licencia',baja:'Baja',egresado:'Egresado'}[e]||e;}
+function estadoInformeLabel(e){return {presentado:'Presentado',defendido:'Defendido',aprobado:'Aprobado',rechazado:'Rechazado',pendiente:'Pendiente'}[e]||e;}
+function badge(e){return `<span class="badge b-${e}">${estadoLabel(e)}</span>`;}
+function iniciales(n){ if(!n)return '·'; return n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function val(id){ return document.getElementById(id).value; }
+function chk(id){ return document.getElementById(id).checked; }
+function cerrarModal(){ document.getElementById('overlay').classList.remove('show'); document.body.style.overflow='';
+  if(pendingRemote){ db=pendingRemote; pendingRemote=null; migrate(); cacheSave(); render(); } }
+document.getElementById('overlay').onclick=e=>{ if(e.target.id==='overlay') cerrarModal(); };
+let toastT;
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
+
+boot();
+</script>
+</body>
+</html>
